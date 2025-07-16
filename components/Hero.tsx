@@ -56,7 +56,7 @@ const Hero = () => {
         const startValue = isMobile ? 'top 50%' : 'center 60%'
         const endValue = isMobile ? '120% top ' : 'bottom top'
 
-        //@ts-ignore
+        // @ts-expect-error just to make it work
         const tl = (videoRef.current = gsap.timeline({
             scrollTrigger: {
                 trigger: 'video',
