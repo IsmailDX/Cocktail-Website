@@ -3,7 +3,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRef } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { ScrollTrigger, SplitText } from 'gsap/all'
@@ -15,7 +15,7 @@ const Hero = () => {
 
     const isMobile = useMediaQuery({ maxWidth: 767 })
 
-    useGSAP(() => {
+    useEffect(() => {
         // Text animations
         const heroSplit = new SplitText('.title', {
             type: 'chars, words',
