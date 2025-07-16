@@ -3,7 +3,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRef } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { ScrollTrigger, SplitText } from 'gsap/all'
@@ -16,10 +16,10 @@ const Hero = () => {
     const isMobile = useMediaQuery({ maxWidth: 767 })
 
     useGSAP(() => {
+        // Text animations
         const heroSplit = new SplitText('.title', {
             type: 'chars, words',
         })
-
         const paragraphSplit = new SplitText('.subtitle', {
             type: 'lines',
         })
@@ -42,6 +42,7 @@ const Hero = () => {
             delay: 1,
         })
 
+        // Leaf scroll animation
         gsap.timeline({
             scrollTrigger: {
                 trigger: '#hero',
@@ -53,34 +54,44 @@ const Hero = () => {
             .to('.right-leaf', { y: 200 }, 0)
             .to('.left-leaf', { y: -200 }, 0)
 
+        // Video scroll animation
         const startValue = isMobile ? 'top 50%' : 'center 60%'
         const endValue = isMobile ? '120% top ' : 'bottom top'
 
-        // @ts-expect-error just to make it work
-        const tl = (videoRef.current = gsap.timeline({
-            scrollTrigger: {
-                trigger: 'video',
-                start: startValue,
-                end: endValue,
-                // make video play on scroll
-                scrub: true,
-                pin: true,
-            },
-        }))
+        const video = videoRef.current
 
-        // to make the video scrolling smoother because sometimes the mouse wheel scroll and
-        //the video feels like its playing on 10 fps, we go to FFmpeg and download.
-        // you click windows then you click the windows builds by Btbn, then ffmpeg-master-latest-win64-gpl-shared.zip and add the bin folder to env variables in windows
-        // then we go to the folder that has the video and run the command:
-        // ffmpeg -i input.mp4 -vf scale=960:-1 -movflags faststart -vcodec libx264 -crf 20 -g 1 -pix_fmt yuv420p output.mp4
-        // so we did this so it makes the video smoother when scrolling
+        if (video) {
+            const setupScrollVideo = () => {
+                const duration = video.duration
 
-        videoRef.current!.onloadedmetadata = () => {
-            tl.to(videoRef.current, {
-                currentTime: videoRef.current!.duration,
-            })
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: video,
+                        start: startValue,
+                        end: endValue,
+                        scrub: true,
+                        pin: true,
+                    },
+                }).to(video, {
+                    currentTime: duration,
+                    ease: 'none',
+                })
+            }
+
+            // Video metadata might not be loaded yet
+            if (video.readyState >= 1) {
+                setupScrollVideo()
+            } else {
+                video.addEventListener('loadedmetadata', setupScrollVideo)
+                return () => {
+                    video.removeEventListener(
+                        'loadedmetadata',
+                        setupScrollVideo
+                    )
+                }
+            }
         }
-    }, [])
+    }, [isMobile])
 
     return (
         <>
@@ -129,10 +140,10 @@ const Hero = () => {
             <div className="video absolute inset-0">
                 <video
                     ref={videoRef}
-                    src={'/videos/output.mp4'}
                     muted
                     playsInline
                     preload="auto"
+                    src="/videos/output.mp4"
                 />
             </div>
         </>
