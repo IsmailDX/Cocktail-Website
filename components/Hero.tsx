@@ -91,7 +91,7 @@ const Hero = () => {
                 }
             }
         }
-    }, [isMobile])
+    }, [])
 
     return (
         <>
