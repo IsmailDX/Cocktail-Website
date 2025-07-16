@@ -3,7 +3,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRef } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { ScrollTrigger, SplitText } from 'gsap/all'
