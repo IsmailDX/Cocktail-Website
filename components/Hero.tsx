@@ -11,7 +11,8 @@ import { ScrollTrigger, SplitText } from 'gsap/all'
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const Hero = () => {
-    const videoRef = useRef<HTMLVideoElement>(null)
+    const videoRefDesktop = useRef<HTMLVideoElement>(null)
+    const videoRefMobile = useRef<HTMLVideoElement>(null)
 
     const isMobile = useMediaQuery({ maxWidth: 767 })
 
@@ -58,7 +59,16 @@ const Hero = () => {
         const startValue = isMobile ? 'top 50%' : 'center 60%'
         const endValue = isMobile ? '120% top ' : 'bottom top'
 
-        const video = videoRef.current
+        const video = isMobile
+            ? videoRefMobile.current
+            : videoRefDesktop.current
+
+        // to make the video scrolling smoother because sometimes the mouse wheel scroll and
+        //the video feels like its playing on 10 fps, we go to FFmpeg and download.
+        // you click windows then you click the windows builds by Btbn, then ffmpeg-master-latest-win64-gpl-shared.zip and add the bin folder to env variables in windows
+        // then we go to the folder that has the video and run the command:
+        // ffmpeg -i input.mp4 -vf scale=960:-1 -movflags faststart -vcodec libx264 -crf 20 -g 1 -pix_fmt yuv420p output.mp4
+        // so we did this so it makes the video smoother when scrolling
 
         if (video) {
             const setupScrollVideo = () => {
@@ -69,6 +79,7 @@ const Hero = () => {
                         trigger: video,
                         start: startValue,
                         end: endValue,
+                        // make video play on scroll
                         scrub: true,
                         pin: true,
                     },
@@ -138,13 +149,25 @@ const Hero = () => {
             </section>
 
             <div className="video absolute inset-0">
-                <video
-                    ref={videoRef}
-                    muted
-                    playsInline
-                    preload="auto"
-                    src="/videos/output.mp4"
-                />
+                {isMobile ? (
+                    <video
+                        ref={videoRefMobile}
+                        muted
+                        playsInline
+                        preload="auto"
+                        className="block"
+                        src="/videos/outputMobile.mp4"
+                    />
+                ) : (
+                    <video
+                        ref={videoRefDesktop}
+                        muted
+                        playsInline
+                        preload="auto"
+                        className="block"
+                        src="/videos/output.mp4"
+                    />
+                )}
             </div>
         </>
     )
