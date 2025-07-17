@@ -141,6 +141,11 @@ const Hero = () => {
                                 Every cocktail on our menu is a blend of premium
                                 ingredients, creative, flair, and timeless
                                 recipes - designed to delight your senses.
+                                <link
+                                    rel="stylesheet"
+                                    type="text/css"
+                                    href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+                                />
                             </p>
                             <a href="#cocktails">View Cocktails</a>
                         </div>
@@ -166,6 +171,7 @@ const Hero = () => {
                         preload="auto"
                         className="block"
                         src="/videos/output.mp4"
+                        id="video-desktop"
                     />
                 )}
             </div>

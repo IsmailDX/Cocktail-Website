@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import SmoothScrolling from '@/components/SmoothingScrolling'
-import FontLoader from '@/components/FontLoader'
+import FontLoader from '@/components/loaders/FontLoader'
+import SpecificVideoLoader from '@/components/loaders/SpecificVideoLoader'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -30,7 +31,8 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <SmoothScrolling>
-                    <FontLoader />
+                    {/* <FontLoader /> */}
+                    <SpecificVideoLoader targetId="video-desktop" />
                     {children}
                 </SmoothScrolling>
             </body>
