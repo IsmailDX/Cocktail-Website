@@ -95,8 +95,8 @@ const Art = () => {
                     <div id="masked-content">
                         <h3>Made with craft poured with passion</h3>
                         <p>
-                            This isn't just a drink. Its a carefully crafted
-                            moment made just for you.
+                            This isn&apos;t just a drink. Its a carefully
+                            crafted moment made just for you.
                         </p>
                     </div>
                 </div>
